@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -34,68 +36,68 @@ class MyHomePage extends StatelessWidget {
         rightIcon: "circle_logo.png",
         desc: "Jenny Barnes",
         cardNumber: "**** 5868",
-        money: 1234,
+        money: 801546,
         isSelect: true),
     CardInfo(
         leftIcon: "citibank_logo.png",
         rightIcon: "visa_inc_logo.png",
         desc: "Jenny Barnes",
         cardNumber: "**** 1234",
-        money: 1234),
+        money: 1234,
+        isSelect: false),
     CardInfo(
         leftIcon: "capital_one_logo.png",
         rightIcon: "circle_logo.png",
         desc: "Jenny Barnes",
         cardNumber: "**** 8024",
-        money: 1234),
+        money: 2565452,
+        isSelect: false),
   ];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          //why use the scaffold
-          appBar: AppBar(
-            leading: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.red,
-              size: 30,
+      //why use the scaffold
+      appBar: AppBar(
+        leading: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.red,
+          size: 30,
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: ListView(
+        children: <Widget>[
+          _todoCard(), //分离组件
+          //SizedBox(height: 10,),//组件隔离 间距
+          Text(
+            '   Spending Habits',
+            style: _list(),
+          ),
+          Container(
+            height: 115,
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                //如果这个ListView外层不加
+                return _buildhabitcard(context, habits[index]);
+              },
+              itemCount: habits.length,
+              scrollDirection: Axis.horizontal,
             ),
-            backgroundColor: Colors.white,
           ),
-          body: ListView(
-            children: <Widget>[
-              _todoCard(), //分离组件
-              //SizedBox(height: 10,),//组件隔离 间距
-              Text(
-                '   Spending Habits',
-                style: _list(),
-              ),
-              Container(
-                height: 115,
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    //如果这个ListView外层不加
-                    return _buildhabitcard(context, habits[index]);
-                  },
-                  itemCount: habits.length,
-                  scrollDirection: Axis.horizontal,
-                ),
-              ),
-              Text('   Mostly Paying with', style: _list()),
-              Container(
-                height: 520,
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return _buildbankcard(context, bankcard[index]);
-                  },
-                  itemCount: bankcard.length,
-                  scrollDirection: Axis.vertical,
-                ),
-              )
-            ],
+          Text('   Mostly Paying with', style: _list()),
+          ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return _buildbankcard(context, bankcard[index]);
+            },
+            itemCount: bankcard.length,
+            shrinkWrap: true, //what happen
+            physics: NeverScrollableScrollPhysics(), //what happen
           ),
-        ));
+        ],
+      ),
+    ));
   }
 
   ///两个 list 的统一样式
@@ -106,41 +108,82 @@ class MyHomePage extends StatelessWidget {
 
   _buildbankcard(BuildContext context, CardInfo cardInfo) {
     return Container(
-      padding: EdgeInsets.all(15), //what happening？
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, //使得文本左对齐
+      height: 160,
+      padding: EdgeInsets.all(20),
+      //what happening？
+      margin: EdgeInsets.only(top: 20,left: 15,right: 15),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, //分布空间？？
         children: <Widget>[
-          Container(//容器
-            height: 149, //设置容器高度
-            decoration: BoxDecoration(
-                color: Color(0xff1CE1AC), //decoration 不能和color并排使用
-                borderRadius: BorderRadius.circular(16)),
-            child: Row(
-              children: <Widget>[
-                Row(
+          Column(
+            //容器 水平布局
+            crossAxisAlignment: CrossAxisAlignment.start, //使得文本左对齐
+            children: <Widget>[
+              Image.asset(cardInfo.leftIcon),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start, //what happen?
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        children: <Widget>[
-                          Image.asset(cardInfo.leftIcon),
-                        ],
-                      ),
+                    Text(
+                      "Select",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: (cardInfo.isSelect
+                              ? Color(0xff1CE1AC)
+                              : Colors.white)),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          Image.asset(cardInfo.rightIcon)
-                        ],
-                      ),
+                    Text(
+                      cardInfo.desc,
+                      style: TextStyle(color: Color(0xff746A96), fontSize: 16),
                     ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(cardInfo.cardNumber,
+                        style:
+                            TextStyle(color: Color(0xff746A96), fontSize: 16))
                   ],
-                )
-
-              ],
-            ),
+                ),
+              )
+            ],
           ),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 100),
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset(cardInfo.rightIcon),
+                    ],
+                  ),
+                ),
+               Row(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: <Widget>[
+                   RichText(//what happen
+                     text: TextSpan(
+                       text: '\$',
+                       style: TextStyle(color: Color(0xff746A96), fontSize: 18),
+                        children: [
+                          TextSpan(
+                            text: '  ${cardInfo.money}',
+                            style: TextStyle(
+                              color: Color(0xff746A96),fontSize: 28
+                            )
+                          )
+                        ]
+                     ),
+                   ),
+                 Text(' 00', style: TextStyle(
+                     color: Color(0xff746A96), fontSize: 20,fontWeight: FontWeight.w300),)
+                 ],
+                )
+              ])
         ],
       ),
     );
@@ -192,7 +235,7 @@ class MyHomePage extends StatelessWidget {
                       //what is Align 将整体容器放置右下角
                       alignment: Alignment.bottomRight,
                       child: Container(
-                        //view 样式
+                          //view 样式
                           width: 124,
                           height: 47,
                           decoration: BoxDecoration(
