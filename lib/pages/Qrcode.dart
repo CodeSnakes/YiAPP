@@ -1,8 +1,14 @@
 //这是QrcodeView类的控制页
 import 'dart:typed_data';
 import 'dart:async';
+import 'dart:ui' as ui;
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:qrscan/qrscan.dart' as scanner;
 
 class QrcodeView extends StatefulWidget {
@@ -15,23 +21,40 @@ class _QrcodeViewState extends State<QrcodeView> {
   String barcode = '';
   String usercode= '';
   Uint8List bytes = Uint8List(200);
+  GlobalKey _globalKey = GlobalKey();
 
   TextEditingController _controller; //写入框使用
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
   //按钮文字style
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.blue);
+      TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.blue);
 
   @override
   initState() {
-    //what happen?? 初始化状态
-    super.initState();
+    super.initState();//what happen?? 初始化状态
   }
 
+ Future _saveNet() async {
+    print("Save");
+    //![](https://gitee.com/yichangkong/FigureBed/raw/master/img/20200728002446.png)
+    // https://gitee.com/yichangkong/FigureBed/raw/master/img/yiqr.png
+    var response = await Dio().get(
+        "https://gitee.com/yichangkong/FigureBed/raw/master/img/20200728002446.png",
+        options: Options(responseType: ResponseType.bytes));
+    final result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.data),
+        quality: 60,
+        name: "hello");
+    print(result);
+  }
+
+ Future _saveGentQR() async {
+    print('saveGen');
+    final result = await ImageGallerySaver.saveImage(bytes);
+  }
   //单击弹框
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog(
@@ -96,7 +119,7 @@ class _QrcodeViewState extends State<QrcodeView> {
           children: <Widget>[
             Container(
               height: 320,
-              color: Color(0x99E0DCE1),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)),color: Color(0x99E0DCE1),),
               child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Column(
@@ -112,8 +135,8 @@ class _QrcodeViewState extends State<QrcodeView> {
                         children: <Widget>[
                           FloatingActionButton.extended(
                             backgroundColor: Colors.white,
-                            label: Text('Save QRImage',style: optionStyle,),
-                            onPressed: () {  _showMyDialog(context); },
+                            label: Text('Save QR',style: optionStyle,),
+                            onPressed: (){_saveGentQR();},
                           ),
                           SizedBox( width: 20,  ),
                           FloatingActionButton.extended(
@@ -194,7 +217,6 @@ class _QrcodeViewState extends State<QrcodeView> {
                   onTap: (){_generateBarCode(usercode);} ,
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    width: 125,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -216,12 +238,11 @@ class _QrcodeViewState extends State<QrcodeView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 2),
+                SizedBox(width: 10),
                 GestureDetector(
                   onTap:  _scan,
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    width: 125,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -239,12 +260,11 @@ class _QrcodeViewState extends State<QrcodeView> {
                     ),
                   ),
                 ),
-                SizedBox( width: 2),
+                SizedBox( width: 10),
                 GestureDetector(
                   onTap: _scanPhoto,
                   child: Container(
                     padding: EdgeInsets.all(10),
-                    width: 125,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -280,7 +300,9 @@ class _QrcodeViewState extends State<QrcodeView> {
   }
 
   Future _scanPhoto() async {
+    print("SCAN");
     String barcode = await scanner.scanPhoto();
+    print("Scan:"+barcode);
     setState(() => this.barcode = barcode);
   }
 
@@ -293,13 +315,11 @@ class _QrcodeViewState extends State<QrcodeView> {
       Uint8List result = await scanner.generateBarCode('https://yichangkong.gitee.io/');
       this.setState(() => this.bytes = result);
     }
-
-
-
   }
 
   Future _clearBarCode() async {
     Uint8List barcodes = Uint8List(200); //初始化
     setState(() => this.bytes = barcodes);
   }
+
 }
