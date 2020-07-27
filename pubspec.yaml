@@ -59,6 +59,13 @@ flutter:
     - welldone_icon.png
     - food.png
     - clothing_icon.png
+    - assets/icons/QR.png
+    - assets/icons/QRcode.png
+    - assets/icons/scan.png
+    - assets/icons/scanf.png
+    - assets/icons/scan_fill.png
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

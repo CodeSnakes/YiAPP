@@ -5,23 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
-class QrcodeView extends StatefulWidget{
+class QrcodeView extends StatefulWidget {
   @override
   _QrcodeViewState createState() => new _QrcodeViewState();
 }
 
-// 我写个 这个博客 有解释我为什么选择flutter开发app
-//B站的聊天 不可以发连接 客气
-
-//  哈哈哈哈哈
-
 
 class _QrcodeViewState extends State<QrcodeView> {
-
   String barcode = '';
+  String usercode= '';
   Uint8List bytes = Uint8List(200);
 
-  TextEditingController _controller;//写入框使用
+  TextEditingController _controller; //写入框使用
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -29,12 +24,14 @@ class _QrcodeViewState extends State<QrcodeView> {
 
   //按钮文字style
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white);
+      TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.blue);
 
   @override
-  initState() {//what happen?? 初始化状态
+  initState() {
+    //what happen?? 初始化状态
     super.initState();
   }
+
   //单击弹框
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog(
@@ -43,135 +40,237 @@ class _QrcodeViewState extends State<QrcodeView> {
       builder: (BuildContext context) {
         return Container(
             child: CupertinoAlertDialog(
-
-              content: SingleChildScrollView(
-                padding: EdgeInsets.all(15),
-
-                child: ListBody(
-                  children: <Widget>[
-                    Text("Why to click me ??? \n Why???",style: TextStyle(fontSize: 28),),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                CupertinoDialogAction(
-                  child: Text("Approve"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                CupertinoDialogAction(
-                  child: Text("Come"),
-                  onPressed: () {},
+          content: SingleChildScrollView(
+            padding: EdgeInsets.all(15),
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  "Why to click me ??? \n Why???",
+                  style: TextStyle(fontSize: 28),
                 ),
               ],
-            ));
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text("Approve"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text("Come"),
+              onPressed: () {},
+            ),
+          ],
+        ));
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        leading:  GestureDetector(
-            onTap: (){   _showMyDialog(context);  },
-            child:
-            Padding(padding: EdgeInsets.all(10),child:
-            Column(
-              children: <Widget>[
-                Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.red,
-                  size: 30,
-                ),
-              ],
-            ),)
-        ),
+        leading: GestureDetector(
+            onTap: () {
+              _showMyDialog(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                ],
+              ),
+            )),
         backgroundColor: Colors.white,
       ),
-        body: Container(
-          padding: const EdgeInsets.all(15),//整个容器内填充
-          child: ListView(
-            children: <Widget>[
-              SizedBox(
-                child: Container(
-                  height: 250,
-                  color: Colors.grey,
-                  child: Image.memory(bytes),
-                  )
-              ),
-              SizedBox(height: 20),
-              TextField(
-                textAlign: TextAlign.center,
-                controller: _controller,
-                decoration: InputDecoration(  icon: Icon(Icons.text_fields),labelText: '请输入你想要生成的网址',
-                  helperText: '或者文本信息 eg: love', ),
-                onSubmitted: (String value) async {
-              await showDialog<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Thanks!'),
-                    content: Text('You typed "$value".'),
-                    actions: <Widget>[
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('OK'),
+      body: Container(
+        padding: const EdgeInsets.all(15), //整个容器内填充
+        child: ListView(
+          children: <Widget>[
+            Container(
+              height: 320,
+              color: Color(0x99E0DCE1),
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 250,
+                        padding: EdgeInsets.all(15),
+                        child: Image.memory(bytes),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FloatingActionButton.extended(
+                            backgroundColor: Colors.white,
+                            label: Text('Save QRImage',style: optionStyle,),
+                            onPressed: () {  _showMyDialog(context); },
+                          ),
+                          SizedBox( width: 20,  ),
+                          FloatingActionButton.extended(
+                            backgroundColor: Colors.white,
+                            label: Text('Remove QR',style: optionStyle,),
+                            onPressed: () { _clearBarCode();
+                            },
+                          )
+                        ],
+                      )
                     ],
+                  )),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              textAlign: TextAlign.center,
+              controller: _controller,
+              decoration: InputDecoration(
+                  icon: Icon(Icons.text_fields),
+                  labelText: '请输入你想要生成的网址',
+                  helperText: '或者文本信息 eg: love'),
+              onSubmitted: (String value) async {
+                  await showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          title: const Text('Are you want Generate it!'),
+                          content: Text( "$value"),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                usercode =value;
+                                Navigator.pop(context);
+                                _generateBarCode(value);
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                    },
                   );
-                },
-              );
-            },
-          ),
-              TextField(
-                textAlign: TextAlign.center,
-              ),
-              Text('扫描 - RESULT:  $barcode',
-              style: TextStyle(color: Colors.black,fontSize: 15),),
-              GestureDetector(
-                onTap: _scan,
-                child: RaisedButton(
-                  child: Text(
-                    "扫一扫",
-                    style: optionStyle,
+              },
+            ),
+            Row(
+              children: <Widget>[
+                Icon(Icons.subject),
+                SizedBox(
+                  width: 17,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.only(bottom: 5, top: 5),
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(width: 1.5, color: Colors.grey)),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              '扫描 - 信息:  $barcode',
+                            )
+                          ],
+                        ))
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: (){_generateBarCode(usercode);} ,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    width: 125,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/QR.png',
+                          width: 80,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Generte',
+                          style: optionStyle,
+                        )
+                      ],
+                    ),
                   ),
-                  color: Colors.black,
-                )
+                ),
+                SizedBox(width: 2),
+                GestureDetector(
+                  onTap:  _scan,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    width: 125,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/scanf.png',
+                          width: 80,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text( 'Scan', style: optionStyle, )
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox( width: 2),
+                GestureDetector(
+                  onTap: _scanPhoto,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    width: 125,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/scan_fill.png',
+                          width: 80,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Sacn Photo',
+                          style: optionStyle,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
-              RaisedButton(
-                onPressed: _scanPhoto,
-                child:
-                Text(
-                  "扫描本地相册",
-                  style: optionStyle,
-                ),
-                color: Colors.black,
-              ),
-              RaisedButton(
-                onPressed: _generateBarCode,
-                child: Text(
-                  "生成文本 - 网址",
-                  style: optionStyle,
-                ),
-                color: Colors.black,
-              ),
-              RaisedButton(
-                onPressed: _clearBarCode,
-                child: Text(
-                  "清除生成QR",
-                  style: optionStyle,
-                ),
-                color: Colors.black,
-              ),
-
-            ],
-          ),
-        ),
-    ) ;
+      ),
+    );
   }
 
   //调用相机 扫码二维码解析
@@ -185,10 +284,18 @@ class _QrcodeViewState extends State<QrcodeView> {
     setState(() => this.barcode = barcode);
   }
 
-  Future _generateBarCode() async {
-    Uint8List result =
-    await scanner.generateBarCode('https://yichangkong.gitee.io/');
-    this.setState(() => this.bytes = result);
+  Future _generateBarCode(String string) async {
+    if(string!=''){
+      Uint8List result = await scanner.generateBarCode(string);
+      this.setState(() => this.bytes = result);
+    }else{
+      print(string);
+      Uint8List result = await scanner.generateBarCode('https://yichangkong.gitee.io/');
+      this.setState(() => this.bytes = result);
+    }
+
+
+
   }
 
   Future _clearBarCode() async {
