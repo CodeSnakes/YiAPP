@@ -1,14 +1,11 @@
 //这是QrcodeView类的控制页
 import 'dart:typed_data';
 import 'dart:async';
-import 'dart:ui' as ui;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:qrscan/qrscan.dart' as scanner;
 
 class QrcodeView extends StatefulWidget {
@@ -37,10 +34,8 @@ class _QrcodeViewState extends State<QrcodeView> {
     super.initState();//what happen?? 初始化状态
   }
 
- Future _saveNet() async {
+ Future _saveNet() async {//下载网络图保存至本地文件夹
     print("Save");
-    //![](https://gitee.com/yichangkong/FigureBed/raw/master/img/20200728002446.png)
-    // https://gitee.com/yichangkong/FigureBed/raw/master/img/yiqr.png
     var response = await Dio().get(
         "https://gitee.com/yichangkong/FigureBed/raw/master/img/20200728002446.png",
         options: Options(responseType: ResponseType.bytes));
@@ -51,44 +46,22 @@ class _QrcodeViewState extends State<QrcodeView> {
     print(result);
   }
 
- Future _saveGentQR() async {
+ Future _saveGentQR() async {//保存本地生成二维码图
     print('saveGen');
     final result = await ImageGallerySaver.saveImage(bytes);
   }
   //单击弹框
-  Future<void> _showMyDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return Container(
-            child: CupertinoAlertDialog(
-          content: SingleChildScrollView(
-            padding: EdgeInsets.all(15),
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  "Why to click me ??? \n Why???",
-                  style: TextStyle(fontSize: 28),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text("Approve"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text("Come"),
-              onPressed: () {},
-            ),
-          ],
-        ));
-      },
-    );
+  Future<void> _showTips(BuildContext context) async {
+    print("_showTips");
+    return
+
+      Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Page Function：可扫条形码、二维码，支持网址文本内容的二维码内容生成。'),
+        action: SnackBarAction(
+        label: 'OK I GET It!',
+        onPressed: (){},
+    ))) ;
   }
 
   @override
@@ -97,14 +70,14 @@ class _QrcodeViewState extends State<QrcodeView> {
       appBar: AppBar(
         leading: GestureDetector(
             onTap: () {
-              _showMyDialog(context);
+              _showTips(context);
             },
             child: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
                 children: <Widget>[
                   Icon(
-                    Icons.arrow_back_ios,
+                    Icons.help,
                     color: Colors.red,
                     size: 30,
                   ),

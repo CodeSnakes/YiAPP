@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappforstud/mode/habit.dart';
-import 'Business.dart';
+import 'Maps.dart';
 import 'Qrcode.dart';
 import 'School.dart';
 
@@ -20,8 +20,8 @@ class _HomeViewState extends State<HomeView> {
     title: Text('Home'),
   ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.business),
-      title: Text('Business'),
+      icon: Icon(Icons.gps_fixed),
+      title: Text('Maps'),
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.camera_enhance),
@@ -40,8 +40,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-        child: Scaffold(//why use the scaffold
+    return  Scaffold(//why use the scaffold
             body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
             bottomNavigationBar: BottomNavigationBar(
               items:  navigationBarItem,
@@ -53,7 +52,7 @@ class _HomeViewState extends State<HomeView> {
               selectedFontSize: 18,
             )
         )
-    );
+     ;
   }
 }
 class Gethomelist extends StatelessWidget{
