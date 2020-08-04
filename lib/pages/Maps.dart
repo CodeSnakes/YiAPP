@@ -1,27 +1,31 @@
-//这是HomeView类的控制页
+//这是MapView类的控制页
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/material.dart';
 
-class BusinessView extends StatefulWidget {//新建导航页面
-  BusinessView({Key key}) : super(key: key);
+class Maps extends StatefulWidget {
+  Maps({Key key}) : super(key: key);
   @override
-  _BusinessViewState createState() => _BusinessViewState();
+  _MapsViewState createState() => _MapsViewState();
 }
+class _MapsViewState extends State<Maps> {
 
-class _BusinessViewState extends State<BusinessView> {
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
-
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        body: Center(
-          child: Text(
-            "MapsView",
-            style: optionStyle,
-          ),
-        ),
+
+        appBar: AppBar(title: const Text('Map',style: TextStyle(color: Colors.red),),
+          backgroundColor: Colors.white,),
+        body:
+                Container(
+                  child:  AmapView(),
+                )
       ),
     );
   }
 }
+

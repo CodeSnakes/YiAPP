@@ -1,15 +1,38 @@
+import 'package:amap_map_fluttify/amap_map_fluttify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappforstud/screens/Welcome/welcome_screen.dart';
+import 'package:oktoast/oktoast.dart';
 import 'constants.dart';
 
-void main() {
+Future<void> main() async {
   runApp(MyApp());
+
+  AmapService amapService=  AmapService.instance;
+
+  await amapService.init(
+    androidKey: '9f8df13b7f208099cc2fef162949fd7f',
+  );
 }
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(//  what is MateialAPP
+
+    return   OKToast(
+        child:  MaterialApp(//  what is MateialAPP
       theme: ThemeData(
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
@@ -30,7 +53,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Yi APP ',
-      home: WelcomeScreen(),
-    );
+      home:    WelcomeScreen()
+    ));
   }
+
 }

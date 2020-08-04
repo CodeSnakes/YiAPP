@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
       _selectedIndex = index;  //不加setState  bottomNavigationBar 无法感知修改值
     });
   }
-  List<Widget> _widgetOptions = [  Gethomelist(), BusinessView(),  QrcodeView(),  SchoolView(), ];
+  List<Widget> _widgetOptions = [  Gethomelist(), Maps(),  QrcodeView(),  SchoolView(), ];
 
   @override
   Widget build(BuildContext context) {

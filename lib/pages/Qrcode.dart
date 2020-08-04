@@ -15,6 +15,7 @@ class QrcodeView extends StatefulWidget {
 
 
 class _QrcodeViewState extends State<QrcodeView> {
+  Size size;
   String barcode = '';
   String usercode= '';
   Uint8List bytes = Uint8List(200);
@@ -66,6 +67,8 @@ class _QrcodeViewState extends State<QrcodeView> {
 
   @override
   Widget build(BuildContext context) {
+
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -91,7 +94,7 @@ class _QrcodeViewState extends State<QrcodeView> {
         child: ListView(
           children: <Widget>[
             Container(
-              height: 320,
+              height:   size.height*0.40,
               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)),color: Color(0x99E0DCE1),),
               child: Padding(
                   padding: EdgeInsets.all(10),
@@ -99,7 +102,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 250,
+                        height: size.height*0.25,
                         padding: EdgeInsets.all(15),
                         child: Image.memory(bytes),
                       ),
@@ -111,7 +114,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                             label: Text('Save QR',style: optionStyle,),
                             onPressed: (){_saveGentQR();},
                           ),
-                          SizedBox( width: 20,  ),
+                          SizedBox( width: 20),
                           FloatingActionButton.extended(
                             backgroundColor: Colors.white,
                             label: Text('Remove QR',style: optionStyle,),
@@ -198,7 +201,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/QR.png',
-                          width: 80,
+                          width: size.height*0.08,
                         ),
                         SizedBox(
                           height: 20,
@@ -211,7 +214,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: size.width*0.05,),
                 GestureDetector(
                   onTap:  _scan,
                   child: Container(
@@ -223,7 +226,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/scanf.png',
-                          width: 80,
+                          width: size.height*0.08,
                         ),
                         SizedBox(
                           height: 20,
@@ -233,7 +236,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                     ),
                   ),
                 ),
-                SizedBox( width: 10),
+                SizedBox( width:   size.width*0.05,),
                 GestureDetector(
                   onTap: _scanPhoto,
                   child: Container(
@@ -245,7 +248,7 @@ class _QrcodeViewState extends State<QrcodeView> {
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/scan_fill.png',
-                          width: 80,
+                          width: size.height*0.08,
                         ),
                         SizedBox(
                           height: 20,
