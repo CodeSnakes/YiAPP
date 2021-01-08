@@ -52,7 +52,7 @@ android {
         release {
             keyAlias 'key'
             keyPassword 'liujun'
-            storeFile file('C:/Users/ThinkPad/key.jks')
+            storeFile file('C:/Users/ThinkPad/MyAndroidKey/key.jks')
             storePassword 'liujun'
         }
     }

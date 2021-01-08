@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterappforstud/mode/habit.dart';
 import 'Maps.dart';
 import 'Qrcode.dart';
-import 'School.dart';
+import 'ColorTree.dart';
 
 
 class HomeView extends StatefulWidget {//新建导航页面
@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
       _selectedIndex = index;  //不加setState  bottomNavigationBar 无法感知修改值
     });
   }
-  List<Widget> _widgetOptions = [  Gethomelist(), Maps(),  QrcodeView(),  SchoolView(), ];
+  List<Widget> _widgetOptions = [  Gethomelist(), Maps(),  QrcodeView(),  MyHomePage(), ];
 
   @override
   Widget build(BuildContext context) {

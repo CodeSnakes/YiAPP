@@ -95,7 +95,8 @@ class _QrcodeViewState extends State<QrcodeView> {
           children: <Widget>[
             Container(
               height:   size.height*0.40,
-              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)),color: Color(0x99E0DCE1),),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)),
+                color: Color(0x99E0DCE1),),
               child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Column(
