@@ -1,4 +1,4 @@
-# **FlutterAppForStud**👹
+# **YiApp**👹
 
 > **A Flutter project. also is a demo flutter app for me to learn。**
 
