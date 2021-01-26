@@ -7,9 +7,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
+#environment:
+#  sdk: ">=2.7.0 <3.0.0"
+# 为了解决sqljocky 无法安装的问题 将环境限制更换
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
 dependencies:
   flutter:
     sdk: flutter
@@ -27,6 +29,8 @@ dependencies:
   toast: ^0.1.5
   #动态权限调取
   permission_handler: ^5.0.0+hotfix.6
+  # 调用mysql
+  mysql1: ^0.17.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutterappforstud/pages/Home.dart';
-import '../../../constants.dart';
 import 'background.dart';
 
 class Body extends StatelessWidget {
